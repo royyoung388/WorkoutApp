@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int SIGNIFICANT_SHAKE;
     private int shakeCounter;
+    private long startTime;
 
     private float lastX, lastY, lastZ;
     private float acceleration;
@@ -80,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
             lv.setEnabled(false);
             btStart.setEnabled(false);
             openAcc();
+            startTime = System.currentTimeMillis();
         });
         btStop.setOnClickListener(view -> {
             lv.setEnabled(true);
@@ -101,6 +104,13 @@ public class MainActivity extends AppCompatActivity {
         acceleration = 0.00f;
         currentAcc = SensorManager.GRAVITY_EARTH;
         lastAcc = SensorManager.GRAVITY_EARTH;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        closeAcc();
+        closeFlash();
     }
 
     private void openAcc() {
@@ -161,6 +171,14 @@ public class MainActivity extends AppCompatActivity {
                 // stop after 100
                 if (shakeCounter >= 100) {
                     btStop.callOnClick();
+
+                    long endTime = System.currentTimeMillis();
+                    // 2 minutes
+                    if (endTime - startTime < 120000) {
+                        Toast.makeText(MainActivity.this, "You are a rockstar.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "Great job, keep practicing to get faster.", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 // easy mode
