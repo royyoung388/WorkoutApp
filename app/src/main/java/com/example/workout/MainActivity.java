@@ -7,6 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraManager;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private String CamID;
 
     private SensorEventListener sensorEventListener;
+    MediaPlayer mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             shakeCounter = 0;
             closeAcc();
             closeFlash();
+            mp.reset();
         });
 
         //flash
@@ -161,11 +164,8 @@ public class MainActivity extends AppCompatActivity {
 
             // one shake
             if (acceleration > SIGNIFICANT_SHAKE) {
-                Log.e(TAG, "delta x = " + (x - lastX));
-                Log.e(TAG, "delta y = " + (y - lastY));
-                Log.e(TAG, "delta z = " + (z - lastZ));
-                Log.e(TAG, "current acc = " + currentAcc);
-                Log.e(TAG, "last acc = " + lastAcc);
+                Log.i(TAG, "current acc = " + currentAcc);
+                Log.i(TAG, "last acc = " + lastAcc);
                 shakeCounter++;
                 tvStep.setText(String.valueOf(shakeCounter));
                 // stop after 100
@@ -187,7 +187,8 @@ public class MainActivity extends AppCompatActivity {
                     closeFlash();
 
                     if (shakeCounter == 30) {
-                        // todo play music
+                        mp = MediaPlayer.create(MainActivity.this, R.raw.superman);
+                        mp.start();
                     }
                 }
 
@@ -197,7 +198,8 @@ public class MainActivity extends AppCompatActivity {
                     closeFlash();
 
                     if (shakeCounter == 45) {
-                        // todo play music
+                        mp = MediaPlayer.create(MainActivity.this, R.raw.chariots);
+                        mp.start();
                     }
                 }
 
@@ -207,7 +209,8 @@ public class MainActivity extends AppCompatActivity {
                     closeFlash();
 
                     if (shakeCounter == 60) {
-                        // todo play music
+                        mp = MediaPlayer.create(MainActivity.this, R.raw.rocky);
+                        mp.start();
                     }
                 }
             }
